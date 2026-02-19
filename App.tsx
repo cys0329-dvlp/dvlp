@@ -1,11 +1,11 @@
 
 import React, { useState } from 'react';
-import { HealthProvider, useHealth } from './store/healthStore';
-import Navbar from './components/Navbar';
-import Dashboard from './components/Dashboard';
-import LogForm from './components/LogForm';
-import Pricing from './components/Pricing';
-import Login from './components/Login';
+import { HealthProvider, useHealth } from './store/healthStore.tsx';
+import Navbar from './components/Navbar.tsx';
+import Dashboard from './components/Dashboard.tsx';
+import LogForm from './components/LogForm.tsx';
+import Pricing from './components/Pricing.tsx';
+import Login from './components/Login.tsx';
 
 const MainContent: React.FC = () => {
   const { user } = useHealth();

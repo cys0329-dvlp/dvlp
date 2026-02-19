@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { useHealth } from '../store/healthStore';
-import { HealthMetricType } from '../types';
+import { useHealth } from '../store/healthStore.tsx';
+import { HealthMetricType } from '../types.ts';
 
 interface Props {
   onComplete: () => void;
@@ -32,7 +32,7 @@ const LogForm: React.FC<Props> = ({ onComplete }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
+    <div className="max-w-md mx-auto bg-white rounded-3xl p-8 shadow-xl border border-slate-100 animate-fadeIn">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">건강 데이터 입력</h2>
       
       <div className="flex justify-around mb-8 p-1 bg-slate-100 rounded-2xl">
@@ -57,7 +57,7 @@ const LogForm: React.FC<Props> = ({ onComplete }) => {
               type="number"
               value={value || ''}
               onChange={(e) => setValue(parseFloat(e.target.value))}
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
               placeholder={config[type].placeholder}
               min={config[type].min}
               max={config[type].max}
@@ -73,14 +73,14 @@ const LogForm: React.FC<Props> = ({ onComplete }) => {
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all min-h-[100px]"
+            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all min-h-[100px]"
             placeholder="기록하고 싶은 내용을 적어주세요."
           />
         </div>
 
         <button
           type="submit"
-          className="w-full py-4 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-colors shadow-lg active:scale-95"
+          className="w-full py-4 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-lg active:scale-95"
         >
           기록 저장하기
         </button>

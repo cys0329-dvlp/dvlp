@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useHealth } from '../store/healthStore';
+import { useHealth } from '../store/healthStore.tsx';
 
 interface Props {
   activeTab: 'dashboard' | 'log' | 'premium';

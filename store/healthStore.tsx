@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { AppState, UserProfile, HealthLog, WellnessRoutine } from '../types';
+import { AppState, UserProfile, HealthLog, WellnessRoutine } from '../types.ts';
 
 interface HealthContextType extends AppState {
   login: (profile: UserProfile) => void;
@@ -14,8 +14,12 @@ const HealthContext = createContext<HealthContextType | undefined>(undefined);
 
 export const HealthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, setState] = useState<AppState>(() => {
-    const saved = localStorage.getItem('wellsphere_data');
-    return saved ? JSON.parse(saved) : { user: null, logs: [], routines: [] };
+    try {
+      const saved = localStorage.getItem('wellsphere_data');
+      return saved ? JSON.parse(saved) : { user: null, logs: [], routines: [] };
+    } catch (e) {
+      return { user: null, logs: [], routines: [] };
+    }
   });
 
   useEffect(() => {

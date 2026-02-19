@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { useHealth } from '../store/healthStore';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { generateWellnessRoutine } from '../services/gemini';
+import { useHealth } from '../store/healthStore.tsx';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { generateWellnessRoutine } from '../services/gemini.ts';
 
 const Dashboard: React.FC = () => {
   const { logs, user, routines, addRoutine } = useHealth();
@@ -22,7 +22,7 @@ const Dashboard: React.FC = () => {
       addRoutine(routine);
     } catch (error) {
       console.error("AI Routine Generation Failed", error);
-      alert("루틴 생성 중 오류가 발생했습니다. 다시 시도해주세요.");
+      alert("루틴 생성 중 오류가 발생했습니다. API 키 설정을 확인해주세요.");
     } finally {
       setIsGenerating(false);
     }
@@ -35,7 +35,6 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-8 animate-fadeIn">
-      {/* Header & Goal Section */}
       <section className="bg-gradient-to-r from-emerald-600 to-teal-500 rounded-2xl p-8 text-white shadow-lg">
         <h1 className="text-3xl font-bold mb-2">안녕하세요, {user?.name}님!</h1>
         <p className="text-emerald-50 opacity-90 mb-4">오늘도 건강한 하루를 위해 함께해요.</p>
@@ -45,7 +44,6 @@ const Dashboard: React.FC = () => {
         </div>
       </section>
 
-      {/* Metrics Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: '수면', value: getLatestValue('sleep'), unit: '시간', color: 'bg-blue-50 text-blue-600', icon: '🌙' },
@@ -61,7 +59,6 @@ const Dashboard: React.FC = () => {
         ))}
       </div>
 
-      {/* Routine Section */}
       <section className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-800">AI 맞춤 웰니스 루틴</h2>
@@ -94,11 +91,6 @@ const Dashboard: React.FC = () => {
             <div className="bg-emerald-50 p-6 rounded-xl border border-emerald-100">
               <h4 className="font-semibold text-emerald-900 mb-2">오늘의 어드바이스</h4>
               <p className="text-emerald-800 text-sm italic">"{routines[0].advice}"</p>
-              {!user?.isPremium && (
-                <div className="mt-4 p-3 bg-white/60 rounded-lg text-xs text-emerald-700">
-                  💡 프리미엄 회원이 되면 더 상세한 AI 심층 분석을 받을 수 있습니다.
-                </div>
-              )}
             </div>
           </div>
         ) : (
@@ -108,7 +100,6 @@ const Dashboard: React.FC = () => {
         )}
       </section>
 
-      {/* Progress Chart */}
       <section className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
         <h2 className="text-xl font-bold text-gray-800 mb-6">최근 트렌드</h2>
         <div className="h-[300px] w-full">
