@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <script>
-    // 1. 초기 환경 설정
+    // 전역 환경 설정
     window.global = window;
     window.process = { 
       env: { NODE_ENV: 'production', API_KEY: '' },
@@ -19,15 +19,16 @@
       nextTick: (cb) => setTimeout(cb, 0)
     };
 
-    // 2. 긴급 에러 핸들러 (흰 화면 방지용)
+    // 에러 발생 시 화면에 즉시 표시
     window.onerror = function(msg, url, line, col, error) {
       const root = document.getElementById('root');
       if (root) {
         root.innerHTML = `
-          <div style="padding: 20px; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; margin: 20px; border-radius: 12px; font-family: sans-serif;">
-            <h1 style="font-size: 18px; margin-bottom: 10px;">⚠️ 앱 실행 중 오류가 발생했습니다.</h1>
-            <pre style="font-size: 12px; white-space: pre-wrap;">${msg}\nat ${url}:${line}:${col}</pre>
-            <button onclick="location.reload()" style="margin-top: 15px; padding: 8px 16px; background: #b91c1c; color: white; border: none; border-radius: 6px; cursor: pointer;">다시 시도</button>
+          <div style="padding: 24px; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; margin: 20px; border-radius: 16px; font-family: sans-serif; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+            <h1 style="font-size: 20px; font-weight: bold; margin-bottom: 12px;">⚠️ 실행 오류가 감지되었습니다.</h1>
+            <p style="font-size: 14px; margin-bottom: 8px;">브라우저가 파일을 불러오지 못했거나 코드에 문제가 있습니다.</p>
+            <pre style="font-size: 12px; background: #fff; padding: 12px; border-radius: 8px; overflow-x: auto; border: 1px solid #fee2e2;">${msg}\nURL: ${url}\nLine: ${line}</pre>
+            <button onclick="location.reload()" style="margin-top: 16px; padding: 10px 20px; background: #b91c1c; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">페이지 새로고침</button>
           </div>
         `;
       }
@@ -36,39 +37,39 @@
   </script>
 
   <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-    "@google/genai": "https://esm.sh/@google/genai@1.42.0",
-    "recharts": "https://esm.sh/recharts@3.7.0?external=react,react-dom",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/"
+  {
+    "imports": {
+      "react": "https://esm.sh/react@19.0.0",
+      "react/": "https://esm.sh/react@19.0.0/",
+      "react-dom": "https://esm.sh/react-dom@19.0.0",
+      "react-dom/": "https://esm.sh/react-dom@19.0.0/",
+      "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+      "@google/genai": "https://esm.sh/@google/genai@1.42.0",
+      "recharts": "https://esm.sh/recharts@3.7.0?external=react,react-dom"
+    }
   }
-}
-</script>
+  </script>
   
   <style>
     body { font-family: 'Inter', sans-serif; background-color: #f8fafc; margin: 0; }
-    .loading-spinner {
+    .loading-container {
       display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;
       color: #64748b; font-size: 14px;
     }
+    .spinner {
+      width: 40px; height: 40px; border: 3px solid #f1f5f9; border-top-color: #10b981; 
+      border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
   <div id="root">
-    <div class="loading-spinner">
-      <div style="width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top-color: #10b981; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px;"></div>
-      웰스피어를 불러오고 있습니다...
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>WellSphere를 시작하는 중...</p>
     </div>
   </div>
-  <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
-  
-  <!-- ESM 지원 여부 확인 후 스크립트 실행 -->
-  <script type="module">
-    import "./index.tsx";
-  </script>
+  <script type="module" src="./index.tsx"></script>
 </body>
 </html>
