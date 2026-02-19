@@ -3,12 +3,18 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { HealthLog, UserProfile, WellnessRoutine } from "../types.ts";
 
 export const generateWellnessRoutine = async (user: UserProfile, logs: HealthLog[]): Promise<WellnessRoutine> => {
-  // 브라우저 환경에서 API_KEY를 가져오는 가장 안전한 방법
-  const apiKey = (window as any).process?.env?.API_KEY || (typeof process !== 'undefined' ? process.env.API_KEY : '');
+  // 다양한 환경(Node, Browser, Static)에서 API KEY를 찾는 로직 통합
+  const getApiKey = () => {
+    if (typeof window !== 'undefined' && (window as any).process?.env?.API_KEY) return (window as any).process.env.API_KEY;
+    if (typeof process !== 'undefined' && process.env?.API_KEY) return process.env.API_KEY;
+    return '';
+  };
+
+  const apiKey = getApiKey();
   
   if (!apiKey) {
-    console.error("WellSphere: API Key is missing in process.env");
-    throw new Error("Gemini API Key가 설정되지 않았습니다.");
+    console.warn("WellSphere: API Key is not set in environment.");
+    throw new Error("Gemini API Key가 설정되지 않았습니다. 환경 변수를 확인해주세요.");
   }
 
   const ai = new GoogleGenAI({ apiKey });
@@ -55,7 +61,7 @@ export const generateWellnessRoutine = async (user: UserProfile, logs: HealthLog
     });
 
     const text = response.text;
-    if (!text) throw new Error("Empty response");
+    if (!text) throw new Error("API 응답이 비어있습니다.");
     return JSON.parse(text);
   } catch (error) {
     console.error("WellSphere: Gemini API Error", error);

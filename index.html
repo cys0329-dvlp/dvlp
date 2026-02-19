@@ -9,29 +9,32 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <script>
-    // GitHub Pages 등 정적 호스팅 환경에서 process.env 관련 에러 방지
+    // 1. 초기 환경 설정
+    window.global = window;
     window.process = { 
-      env: { 
-        NODE_ENV: 'production',
-        API_KEY: '' // 실제 API 키는 환경 변수로 주입됩니다.
-      } 
+      env: { NODE_ENV: 'production', API_KEY: '' },
+      version: 'v0.0.0',
+      nextTick: (cb) => setTimeout(cb, 0)
+    };
+
+    // 2. 긴급 에러 핸들러 (흰 화면 방지용)
+    window.onerror = function(msg, url, line, col, error) {
+      const root = document.getElementById('root');
+      if (root) {
+        root.innerHTML = `
+          <div style="padding: 20px; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; margin: 20px; border-radius: 12px; font-family: sans-serif;">
+            <h1 style="font-size: 18px; margin-bottom: 10px;">⚠️ 앱 실행 중 오류가 발생했습니다.</h1>
+            <pre style="font-size: 12px; white-space: pre-wrap;">${msg}\nat ${url}:${line}:${col}</pre>
+            <button onclick="location.reload()" style="margin-top: 15px; padding: 8px 16px; background: #b91c1c; color: white; border: none; border-radius: 6px; cursor: pointer;">다시 시도</button>
+          </div>
+        `;
+      }
+      return false;
     };
   </script>
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f8fafc;
-      margin: 0;
-    }
-    .animate-fadeIn {
-      animation: fadeIn 0.5s ease-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-  </style>
+
   <script type="importmap">
 {
   "imports": {
@@ -39,20 +42,33 @@
     "react-dom": "https://esm.sh/react-dom@19.0.0",
     "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
     "@google/genai": "https://esm.sh/@google/genai@1.42.0",
-    "recharts": "https://esm.sh/recharts@3.7.0",
+    "recharts": "https://esm.sh/recharts@3.7.0?external=react,react-dom",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
     "react/": "https://esm.sh/react@^19.2.4/"
   }
 }
 </script>
+  
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; margin: 0; }
+    .loading-spinner {
+      display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;
+      color: #64748b; font-size: 14px;
+    }
+  </style>
 </head>
 <body>
   <div id="root">
-    <!-- 초기 로딩 표시 (JS 로드 실패 시 확인용) -->
-    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; color: #64748b;">
-      로딩 중...
+    <div class="loading-spinner">
+      <div style="width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top-color: #10b981; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px;"></div>
+      웰스피어를 불러오고 있습니다...
     </div>
   </div>
-  <script type="module" src="./index.tsx"></script>
+  <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+  
+  <!-- ESM 지원 여부 확인 후 스크립트 실행 -->
+  <script type="module">
+    import "./index.tsx";
+  </script>
 </body>
 </html>
