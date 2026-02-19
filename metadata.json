@@ -1,0 +1,7 @@
+{
+  "name": "Copy of WellSphere MVP",
+  "description": "A personalized health and wellness platform that tracks sleep, exercise, diet, and mood, providing AI-driven wellness routines.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
