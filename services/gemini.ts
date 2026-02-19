@@ -3,7 +3,14 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { HealthLog, UserProfile, WellnessRoutine } from "../types";
 
 export const generateWellnessRoutine = async (user: UserProfile, logs: HealthLog[]): Promise<WellnessRoutine> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+  // Ensure process.env is accessed safely to avoid "process is not defined" errors
+  const apiKey = typeof process !== 'undefined' ? process.env.API_KEY : '';
+  
+  if (!apiKey) {
+    throw new Error("Gemini API Key is not configured. Please check your environment variables.");
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
   
   const recentLogs = logs.slice(0, 10);
   const logContext = recentLogs.map(l => `${l.date}: ${l.type} - ${l.value} (${l.note})`).join('\n');
@@ -45,5 +52,10 @@ export const generateWellnessRoutine = async (user: UserProfile, logs: HealthLog
     },
   });
 
-  return JSON.parse(response.text);
+  const text = response.text;
+  if (!text) {
+    throw new Error("No response from Gemini API");
+  }
+  
+  return JSON.parse(text);
 };
