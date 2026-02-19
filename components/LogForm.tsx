@@ -57,7 +57,7 @@ const LogForm: React.FC<Props> = ({ onComplete }) => {
               type="number"
               value={value || ''}
               onChange={(e) => setValue(parseFloat(e.target.value))}
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all text-gray-900"
               placeholder={config[type].placeholder}
               min={config[type].min}
               max={config[type].max}
@@ -73,7 +73,7 @@ const LogForm: React.FC<Props> = ({ onComplete }) => {
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all min-h-[100px]"
+            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all min-h-[100px] text-gray-900"
             placeholder="기록하고 싶은 내용을 적어주세요."
           />
         </div>
